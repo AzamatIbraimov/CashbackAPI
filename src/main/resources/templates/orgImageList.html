@@ -1,0 +1,92 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title data-th-text="#{org_image.label.header.title}"></title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h3 class="w-75 p-3" data-th-text="#{org_image.label.org_images}"></h3>
+                    </div>
+                </div>
+            </div>
+
+<!--    asdasdHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH>        -->
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-6" th:each="orgImage : ${orgImageModels}">
+                    <img alt="org" class="rounded" th:id="${orgImage.id}" th:src="${orgImage.image}" style="object-fit: cover; width: 200px; height: 150px; margin-bottom: 50px; padding: 5px;">
+                </div>
+            </div>
+            <script>
+                $(document).ready(function(){
+                    $("img").click(function(){
+                       var img=$(this).attr('src');
+                       var id=$(this).attr('id');
+                         $("#show-img").attr('src',img);
+                         $("#imgmodal").modal('show');
+                         $("#deletePostMethod").attr('action', 'delete/'+id);
+                         $("#changeLogoPostMethod").attr('action', 'changeLogo/'+id);
+                    });
+                });
+            </script>
+            <div class="modal fade" role="dialog" id="imgmodal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <button type="button" class="btn1" id="buttonForIdImage" data-toggle="modal" data-target="#recordDeleteModal"><i class="fa fa-trash"></i></button>
+                        <form id="changeLogoPostMethod"  th:action="'/organization/'+${orgId}+'/'" method="POST">
+                            <button type="submit" class="btn btn-success" data-th-text="#{label.changeLogo}"></button>
+                        </form>
+                    </div>
+                    <img class="img-responsive" src="" id="show-img" width="450" orgId="">
+                </div>
+            </div>
+
+            <div class="modal fade" id="recordDeleteModal" tabindex="-1" role="dialog" aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="recordDeleteModalLabel" data-th-text="#{button.label.delete_message}"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <label data-th-text="#{org_category.label.confirm_to_delete}"></label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" data-th-text="#{label.no}"></button>
+                            <form id="deletePostMethod" th:action="'/organization/list'" method="POST">
+                                <button type="submit" class="btn btn-primary" data-th-text="#{label.yes}"></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<!--    asdasdHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH>        -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-start">
+                    <li th:if="${orgImageModels.hasPrevious()}" class="page-item" >
+                        <a class="page-link" th:href="'/organization/'+${orgId}+'/image/list'+${orgImageModels.number-1}" tabindex="-1">Previous</a>
+                    </li>
+                    <th:block th:each="i: ${#numbers.sequence(0, orgImageModels.totalPages - 1)}">
+                        <li class="page-item active" th:if="${orgImageModels.number == i}" >
+                            <span class="page-link">[[${i}+1]]</span>
+                        </li>
+                        <li th:unless="${orgImageModels.number == i}">
+                            <a class="page-link" th:href="'/organization/'+${orgId}+'/image/list?page='+${i}">[[${i}+1]]</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:if="${orgImageModels.hasNext()}">
+                        <a class="page-link" th:href="'/organization/'+${orgId}+'/image/list'+${orgImageModels.number+1}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</body>
+</html>

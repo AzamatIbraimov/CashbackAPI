@@ -1,0 +1,124 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.fil/1999/xhtml" xmlns:th="http://www.w3.fil/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <title data-th-text="#{filialList.label.header.title}"></title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <!--  Table header and 'Create' Button  -->
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h3 class="w-75 p-3" data-th-text="#{filialList.label.branches}"></h3>
+                    </div>
+                    <div class="col-md-2 float-right">
+                        <a sec:authorize="hasRole('ADMIN')" class="btn btn-success m-t-10" href="form"
+                           data-th-text="#{button.label.create}"></a>
+                        <a sec:authorize="hasRole('MANAGER')" class="btn btn-success m-t-10"
+                           th:href="@{'/organization/' + ${orgId} + '/filial/form'}"
+                           data-th-text="#{button.label.create}"></a>
+                    </div>
+                </div>
+                <form class="row" th:action="@{'/organization/' + ${orgId} + '/filial/list'}" method="get">
+                    <div id="custom-search" class="top-search-bar col">
+                        <input width="125px" class="form-control" type="text" name="search"
+                               placeholder="Search for organization">
+                    </div>
+                    <div class="col float-right">
+                        <button type="submit" class="btn btn-info m-t-10"
+                                data-th-text="#{button.label.search}"></button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="bg-light">
+                        <tr class="border-0">
+                            <th class="border-0">#</th>
+                            <th class="border-0" data-th-text="#{filialList.label.img}"></th>
+                            <th class="border-0" data-th-text="#{filialList.label.branch}"></th>
+                            <th class="border-0" data-th-text="#{filialList.label.address}"></th>
+                            <th class="border-0" data-th-text="#{filialList.label.status}"></th>
+                            <th class="border-0" data-th-text="#{filialList.label.rate}"></th>
+                            <th class="border-0" data-th-text="#{filialList.label.profile}"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="fil : ${filials}">
+                            <td th:text="${fil.id}">1</td>
+                            <td>
+                                <div class="m-r-10"><img th:src="${fil.image}" alt="org" class="rounded" width="45"></div>
+                            </td>
+                            <td th:text="${fil.name}"> Filial Name</td>
+                            <td th:text="${fil.address}"> Address</td>
+<!--                            <td>-->
+<!--                                <input type="checkbox" class="switch-button switch-button-xs" th:checked=orgBonus.status-->
+<!--                                       name="status"-->
+<!--                                       id="input-select"><span>-->
+<!--                                <label for="input-select"></label></span>-->
+<!--                            </td>-->
+                            <td>
+                                <div class="switch-button switch-button-xs">
+                                <input type="checkbox" class="switch-button switch-button-xs"
+                                       th:checked=${fil.status} name="status"
+                                       th:id="${fil.id}"><span>
+                            <label th:for="${fil.id}"></label></span>
+                                </div>
+                            </td>
+                            <td><a th:text="${fil.averageRate}"
+                                   th:href="@{'/organization/filial/' + ${fil.id} + '/rate/list'}"></a></td>
+                            <td sec:authorize="hasRole('ADMIN')"><a th:href="${fil.id}"><i
+                                    class="fas fa-address-book"></i></a></td>
+                            <td sec:authorize="hasRole('MANAGER')"><a
+                                    th:href="@{'/organization/' + ${orgId} + '/filial/' + ${fil.id}}"><i
+                                    class="fas fa-address-book"></i></a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li th:if="${filials.hasPrevious()}" class="page-item">
+                    <a class="page-link"
+                       th:href="@{'/organization/' + ${orgId} + '/filial/list?page=' + ${filials.number-1} +'&search='+${search}}"
+                       tabindex="-1" data-th-text="#{pagination.label.previous}"></a>
+                </li>
+                <th:block th:each="i: ${#numbers.sequence(0, filials.totalPages - 1)}">
+                    <li class="page-item active" th:if="${filials.number == i}">
+                        <span class="page-link">[[${i}+1]]</span>
+                    </li>
+                    <li th:unless="${filials.number == i}">
+                        <a class="page-link"
+                           th:href="@{'/organization/' + ${orgId} + '/filial/list?page=' + ${i} +'&search='+${search}}">[[${i}+1]]</a>
+                    </li>
+                </th:block>
+                <li class="page-item" th:if="${filials.hasNext()}">
+                    <a class="page-link"
+                       th:href="@{'/organization/' + ${orgId} + '/filial/list?page=' + ${filials.number+1} +'&search='+${search}}"
+                       data-th-text="#{pagination.label.next}"></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+        <script>
+                $(".switch-button").change(function () {
+                var idcheck = $(this).attr('id');
+                console.log(idcheck);
+                $.ajax({
+                    type: "GET",
+                    url: `../../../api/filial/changeStatus/${idcheck}`,
+                });
+            });
+        </script>
+</div>
+</body>
+
+</html>

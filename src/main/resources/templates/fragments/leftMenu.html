@@ -1,0 +1,105 @@
+<html
+        lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!-- ============================================================== -->
+<!-- left sidebar -->
+<!-- ============================================================== -->
+<div class="nav-left-sidebar sidebar-dark" th:fragment="leftMenu">
+    <div class="menu-list">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav flex-column">
+<!--                    <li class="nav-divider" >-->
+<!--                         <span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"-->
+<!--                               class="text-brand" data-th-text="#{leftMenu.label.admin}"> </span>-->
+<!--                        <span th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}"-->
+<!--                              class="text-brand" data-th-text="#{leftMenu.label.manager}"> </span>-->
+<!--                        <span th:if="${#authorization.expression('hasRole(''ROLE_CASHIER'')')}"-->
+<!--                              class="text-brand" data-th-text="#{leftMenu.label.cashier}"> </span>-->
+<!--                    </li>-->
+                    <li class="nav-item ">
+                        <div sec:authorize="hasRole('ADMIN')" >
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/organization/list}" data-th-text="#{leftMenu.label.organizations}"></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/org_category/list}" data-th-text="#{leftMenu.label.organization_category}"></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/bonus/list}" data-th-text="#{label.bonuses}"></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/client/list}" data-th-text="#{leftMenu.label.clients}"></a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div sec:authorize="hasRole('MANAGER')">
+                            <ul class="nav flex-column">
+
+                                <li class="nav-item">
+                                    <!--Profile-->
+                                    <a class="nav-link" th:href="@{'/organization/forOrgAdmin'}" data-th-text="#{leftMenu.label.profile}"><span class="badge badge-secondary" data-th-text="#{leftMenu.label.new}"></span></a>
+                                </li>
+                                <li class="nav-item">
+                                    <!--Bonuses-->
+                                    <a class="nav-link" th:href="@{'/bonus/forOrgAdmin'}" data-th-text="#{label.bonuses}"></a>
+                                </li>
+                                <li class="nav-item">
+                                    <!--Events-->
+                                    <a class="nav-link" th:href="@{'/organization/event/list/forOrgAdmin'}" data-th-text="#{leftMenu.label.events}"></a>
+                                </li>
+                                <li class="nav-item">
+                                    <!--Clients-->
+                                    <a class="nav-link" th:href="@{'/client/list/forOrgAdmin'}" data-th-text="#{leftMenu.label.clients}"></a>
+                                </li>
+                                <li class="nav-item">
+                                    <!--Filial-->
+                                    <a class="nav-link" th:href="@{'/organization/filial/list/forOrgAdmin'}" data-th-text="#{label.filial}"></a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <!--Filial-->
+                                    <a class="nav-link" th:href="@{'/organization/manager/list/forOrgAdmin'}" data-th-text="#{label.managers}"></a>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <div sec:authorize="hasRole('CASHIER')">
+                            <ul class="nav flex-column">
+
+                                <li class="nav-item">
+                                    <!--Operation-->
+                                    <a class="nav-link" th:href="@{'/cashier'}" data-th-text="#{leftMenu.label.cashier_operation}"><span class="badge badge-secondary" data-th-text="#{leftMenu.label.new}"></span></a>
+                                </li>
+                                <li class="nav-item">
+                                    <!--History-->
+                                    <a class="nav-link" th:href="@{'/cashier/history'}" data-th-text="#{leftMenu.label.cashier_history}"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <form class="form-inline my-2 my-lg-0 m-r-10" th:action="@{/logout}">-->
+                    <!--                            <button class="btn btn-sm btn-outline-primary my-2 my-sm-0" type="submit" data-th-text="#{leftMenu.label.logout}">-->
+                    <!--                            </button>-->
+                    <!--                        </form>-->
+                    <!--                    </li>-->
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- end left sidebar -->
+<!-- ============================================================== -->
+</html>

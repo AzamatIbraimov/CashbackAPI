@@ -1,0 +1,115 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title data-th-text="#{organizationList.label.header.title}"></title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12">
+            <div class="card" style = "width: 135% !important">
+            <!--  Table header and 'Create' Button  -->
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h3 class="w-75 p-3" data-th-text="#{organizationList.label.org_s}"></h3>
+                        </div>
+                        <div class="col-md-2 float-right">
+                            <a class="btn btn-success m-t-10" th:href="${'/organization/form'}" data-th-text="#{button.label.create}"></a>
+                        </div>
+                    </div>
+                    <form class="row" th:action="@{/organization/list}" method="get">
+                        <div id="custom-search" class="top-search-bar col">
+                            <input width="125px" class="form-control" type="text" name="search" th:placeholder="#{organizationList.label.search}">
+                        </div>
+                        <div class="col float-right">
+                            <button type="submit" class="btn btn-info m-t-10" data-th-text="#{button.label.search}"></button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="bg-light">
+                            <tr class="border-0">
+                                <th class="border-0" data-th-text="#{organizationList.label.img}"></th>
+                                <th class="border-0" data-th-text="#{label.org_name}"></th>
+                                <th class="border-0" data-th-text="#{organizationList.label.category}"></th>
+                                <th class="border-0" data-th-text="#{label.status}"></th>
+                                <th class="border-0" data-th-text="#{label.profile}"></th>
+                                <th class="border-0" data-th-text="#{label.filial}"></th>
+                                <th class="border-0" data-th-text="#{label.events}"></th>
+                                <th class="border-0" data-th-text="#{label.bonuses}"></th>
+                                <th class="border-0" data-th-text="#{label.managers}"></th>
+                                <th class="border-0" data-th-text="#{label.images}"></th>
+                            </tr>
+                            </thead>
+                            <tbody style="">
+                                <tr class="align-items-center" th:if="${isEmpty}">
+                                    <h3 th:text="${ searchResult  + ' ' + #{label.not_found} }" class="m-l-10 text-danger text-bold"></h3>
+                                </tr>
+                                <tr th:each="org : ${organizations}">
+                                    <td>
+                                        <div class="m-r-10">
+                                            <img th:src="${org.image != null} ? ${org.image} : ${@environment.getProperty('organization.default.image')}" alt="org image" class="rounded" width="45">
+                                        </div>
+                                    </td>
+                                    <td th:text="${org.name}"> Organization Name </td>
+                                    <td th:text="${org.categoryName}">Organization Category</td>
+                                    <td>
+                                    <div class="switch-button switch-button-xs">
+                                    <input type="checkbox" class="switch-button switch-button-xs"
+                                               th:checked=${org.status} name="status"
+                                               th:id="${org.id}"><span>
+                                                <label th:for="${org.id}"></label></span>
+                                    </div>
+                                    </td>
+                                    <td><a th:href="${org.id}"><i class="fas fa-address-book"></i></a></td>
+                                    <td><a th:href="@{'/organization/' + ${org.id} + '/filial/list'}"><i class=" fas fa-building"></i></a></td>
+                                    <td><a  th:href="@{'/organization/' + ${org.id} + '/event/list'}"><i class="fas fa-table"></i></a> </td>
+                                    <td><a  th:href="@{'/organization/' + ${org.id} + '/bonus/list'}"><i class="far fa-money-bill-alt"></i></a> </td>
+                                    <td><a  th:href="@{'/organization/' + ${org.id} + '/manager/list'}"><i class="far fa-user"></i></a> </td>
+                                    <td><a  th:href="@{'/organization/' + ${org.id} + '/image/list'}"><i class="fas fa-image"></i></a> </td>
+                                </tr>
+                            <!--    end of looping     -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-start">
+                    <li th:if="${organizations.hasPrevious()}" class="page-item" >
+                        <a class="page-link" th:href="@{/organization/list(page=${organizations.number-1})}" tabindex="-1" data-th-text="#{pagination.label.previous}"></a>
+                    </li>
+                    <th:block th:each="i: ${#numbers.sequence(0, organizations.totalPages - 1)}">
+                        <li class="page-item active" th:if="${organizations.number == i}" >
+                            <span class="page-link">[[${i}+1]]</span>
+                        </li>
+                        <li th:unless="${organizations.number == i}">
+                            <a class="page-link" th:href="@{/organization/list(page=${i})}">[[${i}+1]]</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:if="${organizations.hasNext()}">
+                        <a class="page-link" th:href="@{/organization/list(page=${organizations.number+1})}" data-th-text="#{pagination.label.next}"></a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+        <script>
+            $(".switch-button").change(function () {
+                var idcheck = $(this).attr('id');
+                $.ajax({
+                    type: "GET",
+                    url: `../api/organization/changeStatus/${idcheck}`,
+                });
+            });
+        </script>
+    </div>
+
+</body>
+
+</html>

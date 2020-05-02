@@ -1,0 +1,107 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="${event} ? ${event.name} : 'Create New Event'"></title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <!-- ============================================================== -->
+    <!-- profile -->
+    <!-- ============================================================== -->
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="section-block" id="basicform">
+            <h3 class="section-title" th:text="${add} ? #{eventForm.label.create} : #{eventForm.label.update}"> Create
+                New Event</h3>
+            <p th:text="${add} ? #{eventForm.label.create_desc} : #{eventForm.label.update_desc}"></p>
+        </div>
+        <div class="card">
+
+            <div class="card-body">
+                <form action="#" th:action="${create} ? @{create} : @{update/{id}(id = ${event.id})}"
+                      th:object="${event}" method="POST">
+                    <label class="text-dark font-bold col-form-label" data-th-text="#{eventForm.label.image.logo}"></label>
+                    <div class="form-group">
+                        <div class="box">
+                            <div class="js--image-preview"></div>
+                            <div class="upload-options">
+                                <label>
+                                    <input type="file" name="image" class="image-upload" accept="image/*" />
+                                </label>
+                            </div>
+                        </div>
+                        <script th:inline="javascript">
+                            var image = /*[[${event.image}]]*/ null;
+                            if(image != null){
+                                var thumb = document.querySelector('.js--image-preview');
+                                thumb.style.backgroundImage = 'url(' + image + ')';
+                                thumb.className += ' js--no-default';
+                            }
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label class="text-dark font-bold col-form-label" for="inputEventName"
+                               data-th-text="#{label.event}"></label>
+                        <input th:value="${event} ? ${event.name} : '' " th:field="*{name}" id="inputEventName"
+                               type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="text-dark font-bold" for="inputEventDescription"
+                               data-th-text="#{eventForm.label.event_desc}"></label>
+                        <textarea th:text="${event} ? ${event.description} : '' " th:field="*{description} "
+                                  class="form-control" id="inputEventDescription" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="text-dark font-bold" for="dateFrom" data-th-text="#{label.date_from}"></label>
+                        <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                            <input type="text" th:value="${event.dateFrom}" th:field="${event.dateFrom}"
+                                   class="form-control datetimepicker-input" id="dateFrom">
+                            <div class="input-group-append" data-target="#datetimepicker4"
+                                 data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="text-dark font-bold" for="dateTo" data-th-text="#{label.date_to}"></label>
+                        <div class="input-group date" id="datetimepicker5" data-target-input="nearest">
+                            <input type="text" th:value="${event.dateTo}" th:field="${event.dateTo}"
+                                   class="form-control datetimepicker-input" id="dateTo">
+                            <div class="input-group-append" data-target="#datetimepicker5"
+                                 data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button th:text=" ${create} ? #{button.label.create} : #{button.label.update}"
+                                th:class="${'create'} ? 'btn btn-info' : 'btn btn-success' "
+                                type="submit" class="btn btn-success" data-toggle="tooltip"
+                                data-placement="top" title="Tooltip on top">
+                        </button>
+
+                        <a th:active th:style="${create} ? 'visibility:hidden' : ''"
+                           th:href="${create} ? '#' : @{'delete/'+${event.id}}" class="btn btn-danger"
+                           data-toggle="tooltip"
+                           data-placement="top" title="Tooltip on top" data-th-text="#{button.label.delete}">
+                        </a>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+
+    </div>
+    <!-- ============================================================== -->
+    <!-- end profile -->
+    <!-- ============================================================== -->
+</div>
+</body>
+</html>
+
+

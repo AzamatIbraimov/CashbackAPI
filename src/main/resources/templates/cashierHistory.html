@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="#{leftMenu.label.cashier_history}"></title>
+</head>
+<body>
+    <div layout:fragment="content">
+    <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <div class="card">
+                <div class="card-body">
+                    <form th:action="'/cashier/history/filter'" method="get">
+                        <div class="row">
+                            <div class="col-sm-6" >
+                                <label class="text-dark font-bold" for="dateFrom">Date From:</label></br>
+                                <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                                    <input type="text" name="dateFrom" class="form-control datetimepicker-input"
+                                           id="dateFrom" th:value="${dateFrom} ? ${dateFrom}">
+                                    <div class="input-group-append" data-target="#datetimepicker4"
+                                         data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="text-dark font-bold" for="dateTo">Date To:</label></br>
+                                <div class="input-group date" id="datetimepicker5" data-target-input="nearest">
+                                    <input type="text" name="dateTo" class="form-control datetimepicker-input"
+                                           id="dateTo" th:value="${dateTo} ? ${dateTo}">
+                                    <div class="input-group-append" data-target="#datetimepicker5"
+                                         data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-t-20 ">
+                            <button class="btn btn-info" type="submit" data-toggle="tooltip"
+                                    data-placement="top" title="Tooltip on top" data-th-text="#{balanceList.label.search_button}">
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table class="table">
+                    <thead class="bg-light">
+                    <tr class="border-0">
+                        <th class="border-0" >User</th>
+                        <th class="border-0" >Date</th>
+                        <th class="border-0" >Sum</th>
+                        <th class="border-0" >Point</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${history}" >
+                        <td th:text="${item.firstName} + ' ' + ${item.lastName}">  </td>
+                        <td th:text="${item.date}">  </td>
+                        <td th:text="${item.invoiceAmount}">  </td>
+                        <td >
+                            <span th:if="${item.operationType == 'CREDIT'}"><label th:text="'-' + ${item.amount}" style="color: red;"></label></span>
+                            <span th:unless="${item.operationType == 'CREDIT'}"><label th:text="'+' + ${item.amount}" style="color: green;"></label></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+    </div>
+</div>
+</body>
+</html>

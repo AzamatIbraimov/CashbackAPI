@@ -1,0 +1,77 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.fil/1999/xhtml" xmlns:th="http://www.w3.fil/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title data-th-text="#{filialRate.label.header.title}"></title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <!--  Table header and 'Create' Button  -->
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h3 class="w-75 p-3" th:text = "${filial.name}"></h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="bg-light">
+                        <tr class="border-0">
+                            <th class="border-0">#</th>
+                            <th class="border-0" data-th-text="#{filialRate.label.user}"></th>
+                            <th class="border-0" data-th-text="#{filialRate.label.date}"></th>
+                            <th class="border-0" data-th-text="#{filialRate.label.comment}"></th>
+                            <th class="border-0" data-th-text="#{filialRate.label.rate}"></th>
+                            <th class="border-0" data-th-text="#{button.label.delete}"></th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="rate : ${rates}">
+                            <td th:text="${rate.id}">1</td>
+                            <td th:text="${rate.clientFirstName} + ' ' + ${rate.clientLastName}"></td>
+                            <td th:text="${rate.created_date} "></td>
+                            <td th:text="${rate.comment}"></td>
+                            <td th:text="${rate.rate} "></td>
+                            <td><a th:attr="data-target='#recordDeleteModal'+${rate.id}" type="button" data-toggle="modal"><i class="fas fa-trash"></i></a> </td>
+
+                            <!-- Modal -->
+                            <div class="modal fade" th:attr="id='recordDeleteModal'+${rate.id}" tabindex="-1" role="dialog" aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="recordDeleteModalLabel" data-th-text="#{button.label.delete_message}"></h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <label data-th-text="#{filialRate.label.confirm_to_delete}"></label>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" data-th-text="#{label.no}"></button>
+                                            <form th:action="@{'delete/' +${rate.id} }" th:object="${organization}" method="post">
+                                                <button type="submit" class="btn btn-primary" data-th-text="#{label.yes}"></button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal end -->
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}" >
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="${tags==null} ? #{tagForm.label.header.title} : #{tagForm.label.add}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="section-block" id="basicform">
+            <h3 class="section-title" th:text="${add} ? #{tagForm.label.create} : #{tagForm.label.update}"> </h3>
+<!--            <p style="color:red;" th:text="${has_exception} ? ${exception_text} : ''"></p>-->
+        </div>
+        <div class="card" th:if="${tags == null}">
+            <h3 class="card-header font-bold text-dark" th:text="${add} ? #{tagForm.label.create} : ${tag.name}"></h3>
+            <div class="card-body">
+                <form action="#" th:action="${add} ? @{create} : @{'/org_category/'+ ${cat_id} +'/tag/update/' + ${tag.id} }"  th:object="${tag}" method="POST">
+                    <div class="form-group">
+                        <label for="form-tags-1">Simple tags input:</label>
+                        <input id="form-tags-1" name="tags-1" type="text" value="jQuery,Script,Net">
+<!--                        <label for="name" class="text-dark font-bold" data-th-text="#{tagForm.label.name}"></label>-->
+<!--                        <input  id="name" type="text" class="form-control" th:value="${tag} ? ${tag.name} : ' '" th:field="*{name}" maxlength="255" required>-->
+
+                        <p th:if="${#fields.hasErrors('name')}" style="color:red;" th:errors="*{name}">Incorrect LP</p>
+
+                        <button th:text="${add} ? #{button.label.create}: #{button.label.update} "
+                                th:class="${add} ? 'btn btn-success': 'btn btn-info' "
+                                type="submit" class="btn btn-success" data-toggle="tooltip"
+                                data-placement="top" title="Tooltip on top">Create
+                        </button>
+                    <a type="button" th:style="${add} ? 'visibility:hidden' : 'visibility:hidden'"  class="btn btn-danger m-t-20" data-toggle="modal" th:attr="data-target='#recordDeleteModal'+${tag.id}" data-th-text="#{button.label.delete}"></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card" th:unless="${tags == null}" >
+            <h3 class="card-header font-bold text-dark" th:text="#{tagForm.label.add}"></h3>
+            <div class="card-body">
+                <form action="#" th:action="@{adding}"  th:object="${tag}" method="POST">
+                    <div class="form-group">
+                        <label class="text-danger font-bold" for="input-select" data-th-text="#{tagForm.label.name}"></label>
+                        <select th:field="*{id}" class="form-control" id="input-select" >
+                            <!--list of tags-->
+                            <option th:each="t : ${tags}" th:value="${t.id}" th:text="${t.name}"></option>
+                        </select>
+                    </div>
+                        <button th:text="#{button.label.add}"
+                                type="submit" class="btn btn-info" data-toggle="tooltip"
+                                data-placement="top" title="Tooltip on top">Create
+                        </button>
+                    <a type="button" th:style="${add} ? 'visibility:hidden' : 'visibility:hidden'"  class="btn btn-danger m-t-20" data-toggle="modal" th:attr="data-target='#recordDeleteModal'+${tag.id}" data-th-text="#{button.label.delete}"></a>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+<!-- Modal -->
+<!--<div class="modal fade" th:attr="id='recordDeleteModal'+${tag.id}" tabindex="-1" role="dialog" aria-labelledby="recordDeleteModalLabel" aria-hidden="true">-->
+<!--    <div class="modal-dialog" role="document">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title" id="recordDeleteModalLabel" data-th-text="#{button.label.delete_message}"></h5>-->
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">&times;</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <label data-th-text="#{org_category.label.confirm_to_delete}"></label>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-th-text="#{label.no}"></button>-->
+<!--                <form th:action="${add} ? @{/org_category/list} : @{/org_category/delete/{id}(id = ${tag.id})}" th:object="${tag}" th:method="${add} ? 'GET' : 'POST'">-->
+<!--                    <button type="submit" class="btn btn-primary" data-th-text="#{label.yes}"></button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!-- Modal end -->
+</div>
+</body>
+</html>

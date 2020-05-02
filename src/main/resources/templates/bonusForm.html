@@ -1,0 +1,138 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+
+    <title th:text="${bonus} ? ${bonus.name} : #{bonusForm.label.create_bonus}"></title>
+
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+        <div class="section-block" id="basicform">
+            <h3 class="section-title"
+                th:text="${add} ? #{bonusForm.label.create_bonus} : #{bonusForm.label.update_bonus}"></h3>
+
+            <p th:text="${add} ? #{bonusForm.label.create_bonus_desc} : #{bonusForm.label.update_bonus_desc}"></p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <form action="#"
+                      th:action="${isOrganizationPage} ? (${add} ? @{create} : '/organization/'+${organization.id}+'/bonus/update/'+${orgBonus.id}) : ('/bonus/update/'+${orgBonus.id})"
+                      th:object="${orgBonus}" method="POST">
+                    <div class="form-group">
+
+                        <label class="text-dark font-bold col-form-label" for="organizationName"
+                               data-th-text="#{label.org_name}"></label></br>
+                        <a id="organizationName" th:text="${organization.name}"
+                           th:href="@{'/organization/'+ ${organization.id}}"></a>
+
+                        <input type="hidden" th:field="*{organization}" th:value="${organization.id}"/>
+                    </div>
+                    <div th:if="${!add}" class="form-group">
+                        <label class="text-dark font-bold" for="bonusType" data-th-text="#{label.bonus_type}"></label>
+
+                        <p id="bonusType" th:text="${orgBonusType.name}"></p>
+                        <input type="hidden" th:field="*{orgBonusType}" th:value="${orgBonusType}"/>
+                    </div>
+                    <div th:if="${add}" class="form-group">
+                        <label class="text-dark font-bold" for="bonusTypeSelect"
+                               data-th-text="#{label.bonus_type}"></label>
+
+                        <select th:field="*{orgBonusType}" class="form-control" id="bonusTypeSelect">
+                            <option th:each="orgBonusType : ${orgBonusTypes}" th:value="${orgBonusType.id}"
+                                    th:text="${orgBonusType.name}  "></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="text-dark font-bold" for="dateFrom" data-th-text="#{label.date_from}"></label>
+                        <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                            <input type="text" th:value="${orgBonus.validFrom}" th:field="${orgBonus.validFrom}"
+                                   class="form-control datetimepicker-input" id="dateFrom">
+                            <div class="input-group-append" data-target="#datetimepicker4"
+                                 data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label class="text-dark font-bold" for="dateTo" data-th-text="#{label.date_to}"></label>
+                        <div class="input-group date" id="datetimepicker5" data-target-input="nearest">
+                            <input type="text" th:value="${orgBonus.validTo}" th:field="${orgBonus.validTo}"
+                                   class="form-control datetimepicker-input" id="dateTo">
+                            <div class="input-group-append" data-target="#datetimepicker5"
+                                 data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label class="text-dark font-bold" for="input-select" data-th-text="#{label.status}"></label>
+
+                        <br>
+                        <div class="switch-button switch-button-sm">
+                            <input type="checkbox" th:checked="${orgBonus.status}" name="status"
+                                   id="input-select"><span>
+                           <label for="input-select"></label></span>
+                        </div>
+                    </div>
+                    <div th:if="${!add}" class="form-group">
+                        <label class="text-dark font-bold" for="dateTo"
+                               data-th-text="#{bonusForm.label.created_date}"></label>
+                        <p th:text="${#dates.format(orgBonus.createdDate, 'dd-MMM-yyyy')}"></p>
+
+                    </div>
+                    <div>
+                        <button th:text=" ${add} ? #{button.label.create} : #{button.label.update}"
+                                th:class="${'Create'} ? 'btn btn-info' : 'btn btn-success' "
+                                type="submit" class="btn btn-success" data-toggle="tooltip"
+                                data-placement="top" title="Tooltip on top">
+                        </button>
+
+                        <a th:if="${!add}" type="button" style="color: white;" class="btn btn-danger"
+                           data-toggle="modal" data-target="#delete_modal " data-th-text="#{button.label.delete}"></a>
+                        <
+
+                        <!-- Modal -->
+                        <div th:if="${!add}" class="modal fade" tabindex="-1" id="delete_modal" role="dialog"
+                             aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="recordDeleteModalLabel"
+                                            data-th-text="button.label.delete_message"></h5>
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label data-th-text="bonusForm.label.confirm_to_delete"></label>
+                                    </div>
+                                    <div class="modal-footer">
+
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                                data-th-text="#{label.no}"></button>
+                                        <a class="btn btn-danger"
+                                           th:href="@{'/organization/' + ${organization.id}  + '/bonus/delete/' + ${orgBonus.id}}"
+                                           data-th-text="#{label.yes}"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

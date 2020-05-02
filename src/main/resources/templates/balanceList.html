@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Balance</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <div class="card">
+                <div class="card-body">
+                    <form th:action="'/client/'+${clientId}+'/balances/filter'" method="get">
+
+                        <div class="row">
+                            <div class="col-sm-6" >
+                                <div class="form-group">
+                                    <label class="text-dark font-bold" for="orgName" data-th-text="#{balanceList.label.org_name}"></label>
+                                    <select id="orgName" name = "orgId" class="form-control">
+                                        <option value="" data-th-text="#{balanceList.label.search_org}"></option>
+                                        <!--list of organization categories-->
+                                        <option th:each="orgList : ${orgList}" th:value="${orgList.id}" th:text="${orgList.name}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="text-dark font-bold" for="bonusType" data-th-text="#{balanceList.label.bonus_type}"></label>
+                                    <select id="bonusType" name="bonusTypeId" class="form-control">
+                                        <!--list of organization categories-->
+                                        <option value="" data-th-text="#{balanceList.label.search_bonus}"></option>
+                                        <option th:each="orgBonusType : ${orgBonusTypeList}" th:value="${orgBonusType.id}" th:text="${orgBonusType.name}  "></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+<!--                        <div class="row">-->
+<!--                            <div class="col-sm-6" >-->
+<!--                                <label class="text-dark font-bold" for="dateFrom">Date From:</label></br>-->
+<!--                                <input type="date"  name="dateFrom" id="dateFrom"/>-->
+<!--                            </div>-->
+<!--                            <div class="col-sm-6">-->
+<!--                                <label class="text-dark font-bold" for="dateTo">Date To:</label></br>-->
+<!--                                <input type="date" name="dateTo" id="dateTo"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div class="m-t-20 ">
+                            <button class="btn btn-info" type="submit" data-toggle="tooltip"
+                                    data-placement="top" title="Tooltip on top" data-th-text="#{balanceList.label.search_button}">
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table class="table">
+                    <thead class="bg-light">
+                    <tr class="border-0">
+                        <th class="border-0" data-th-text="#{balanceList.label.bonus_type}"></th>
+                        <th class="border-0" data-th-text="#{balanceList.label.current_balance}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${totalList}" >
+                        <td th:text="${item.bonusType}">  </td>
+                        <td th:text="${item.total}">  </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="bg-light">
+                        <tr class="border-0">
+                            <th class="border-0" data-th-text="#{balanceList.label.org_name}"></th>
+                            <th class="border-0" data-th-text="#{balanceList.label.bonus_type}"></th>
+                            <th class="border-0" data-th-text="#{balanceList.label.amount}"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${history}">
+                            <td th:text="${item.organizationName}">  </td>
+                            <td th:text="${item.bonusType}">  </td>
+                            <td>
+                                <span th:if="${item.operationType == 'CREDIT'}"><label th:text="'-' + ${item.amount}" style="color: red;"></label></span>
+                                <span th:unless="${item.operationType == 'CREDIT'}"><label th:text="'+' + ${item.amount}" style="color: green;"></label></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="#{cashier.label.header.title}"></title>
+
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div style="text-align: center;" class="form-group">
+                            <label class="text-dark font-bold" data-th-text="#{cashier.label.summarize}"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 float-right">
+                        <button class="btn btn-success m-t-10" onclick="printJS({ printable: 'printElement', type: 'html', header: '', footer:'' })" data-th-text="#{button.label.print}"></button>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="card-body">
+                <div id="result" class="card-body p-b-10" >
+                    <div class="table-responsive">
+                        <form id="formCreate" th:object="${confirmBalance}" th:action="'/cashier/create'" method="post" >
+                            <div id="printElement">
+                                <input hidden="hidden" id="clientId" th:field="*{clientId}" th:value="${confirmBalance.clientId}"/>
+                                <input hidden="hidden" id="typeId" th:field="*{typeId}" th:value="${confirmBalance.typeId}"/><br>
+                                <label for="invoiceAmount" class="text-dark font-bold" data-th-text="#{cashier.label.invoiceAmount}"></label>
+                                <input  id="invoiceAmount" th:field="*{invoiceAmount}" type="number" class="form-control" th:value="${confirmBalance.invoiceAmount}" readonly />
+                                <label for="point" class="text-dark font-bold" data-th-text="#{cashier.label.point}"></label>
+                                <input  id="point" th:field="*{point}"   type="number" class="form-control" th:value="${confirmBalance.point}" readonly/>
+                                <label for="numberCheck" class="text-dark font-bold" data-th-text="#{cashier.label.numberCheck}"></label>
+                                <input  id="numberCheck"  th:field="*{numberCheck}" type="text" min="0" class="form-control" th:value="${confirmBalance.numberCheck}" readonly/>
+                                <br>
+                                <label for="sumToPay" class="text-dark font-bold" data-th-text="#{cashier.label.pay}"></label>
+                                <input  id="sumToPay" type="text" min="0" class="form-control" th:value="${confirmBalance.invoiceAmount} - ${confirmBalance.point} " readonly/>
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-6" >
+                                        <label for="org" class="text-dark font-bold" data-th-text="#{label.org_name}"></label>
+                                        <input  id="org" type="text" min="0" class="form-control" th:value="${organization.name}" readonly/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="val" class="text-dark font-bold" data-th-text="#{cashier.label.bonus_value}"></label>
+                                        <input  id="val" type="text" min="0" class="form-control" th:value="${organization.value}" readonly/>
+                                    </div>
+                                </div>
+
+                                <label for="cash" class="text-dark font-bold" data-th-text="#{cashier.label.cash}"></label>
+                                <input  id="cash" type="text" min="0" class="form-control" th:value="(${confirmBalance.invoiceAmount} - ${confirmBalance.point})* ${organization.value} /(100)" readonly/>
+                            </div>
+                            <div style="text-align: center;">
+                                <input id="btn_post" th:value="#{button.label.pay}"
+                                        class="btn btn-success m-t-20" type="submit"/>
+                            </div>
+                        </form>
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                            $("#formCreate").submit(function (e) {
+                                $("#btn_post").attr("disabled", true);
+                            });
+                        });
+                    </script>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

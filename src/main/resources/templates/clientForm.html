@@ -1,0 +1,133 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}" lang="en">
+<head>
+    <title th:text="${client} ? ${client.firstName} : #{client.label.create}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="section-block" id="basicform">
+            <h2 class="section-title"
+                th:text="${add} ? #{client.label.create} : #{clientDetailPage.label.update} + ' ' + ${client.firstName} + ' ' + ${client.lastName} + ' ' + ${client.patronymic}"></h2>
+            <p th:if="${!add}" th:text=" #{label.created_date} + ' ' + ${#dates.format(client.createdDate,'dd-MM-yyyy')}"></p>
+            <p style="color:red;" th:text="${has_exception} ? ${exception_text} : ''"></p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <form action="#" th:action="${add} ? @{create} : @{/client/update/{id}(id = ${client.id})}"
+                      th:object="${client}"
+                      method="POST">
+                    <label class="text-dark font-bold col-form-label" data-th-text="#{clientDetailPage.label.image.logo}"></label>
+                    <div class="form-group">
+                        <div class="box">
+                            <div class="js--image-preview"></div>
+                            <div class="upload-options">
+                                <label>
+                                    <input type="file" name="image" class="image-upload" accept="image/*" />
+                                </label>
+                            </div>
+                        </div>
+                        <script th:inline="javascript">
+                            var image = /*[[${client.image}]]*/ null;
+                            if(image != null){
+                                var thumb = document.querySelector('.js--image-preview');
+                                thumb.style.backgroundImage = 'url(' + image + ')';
+                                thumb.className += ' js--no-default';
+                            }
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label for="code" class="text-dark font-bold" data-th-text="#{clientDetailPage.label.personal_code}"></label>
+                        <input id="code" type="text" class="form-control"
+                               th:value="${client} ? ${client.personalCode} : ' '"
+                               th:field="*{personalCode}">
+                        <p th:if="${#fields.hasErrors('personalCode')}" style="color:red;"
+                           th:errors="*{personalCode}">Incorrect LP</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName" class="text-dark font-bold" data-th-text="#{clientDetailPage.label.first_name}"></label>
+                        <input id="firstName" type="text" class="form-control"
+                               th:value="${client} ? ${client.firstName} : ' '"
+                               th:field="*{firstName}">
+                        <p th:if="${#fields.hasErrors('firstName')}" style="color:red;"
+                           th:errors="*{firstName}">Incorrect LP</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName" class="text-dark font-bold" data-th-text="#{clientDetailPage.label.last_name}"></label>
+                        <input id="lastName" type="text" class="form-control"
+                               th:value=" ${client} ? ${client.lastName} : '' "
+                               th:field="*{lastName}"/>
+                        <p th:if="${#fields.hasErrors('lastName')}" style="color:red;"
+                           th:errors="*{lastName}">Incorrect LP</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="patronymic" class="text-dark font-bold" data-th-text="#{clientDetailPage.label.patronymic}"></label>
+                        <input id="patronymic" type="text" class="form-control"
+                               th:value=" ${client} ? ${client.patronymic} : '' " th:field="*{patronymic}"/>
+                        <p th:if="${#fields.hasErrors('patronymic')}" style="color:red;"
+                           th:errors="*{patronymic}">Incorrect LP</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="text-dark font-bold" for="clientSex" data-th-text="#{clientDetailPage.label.sex}"></label>
+                        <select th:field="*{clientSex}" class="form-control" id="clientSex">
+                            <option th:each="clientSex : ${T(kg.nurtelecom.cashbackapi.enums.ClientSex).values()}"
+                                    th:value="${clientSex}" th:text="${clientSex}"></option>
+                        </select>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="nationality" class="text-dark font-bold" data-th-text="#{clientDetailPage.label.nationality}"></label>
+                        <input id="nationality" type="text" class="form-control"
+                               th:value=" ${client} ? ${client.nationality} : '' " th:field="*{nationality}"/>
+                        <p th:if="${#fields.hasErrors('nationality')}" style="color:red;"
+                           th:errors="*{nationality}">Incorrect LP</p>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="locale" class="text-dark font-bold" data-th-text="#{clientDetailPage.label.locale}"></label>
+                        <input id="locale" type="text" class="form-control"
+                               th:value=" ${client} ? ${client.locale} : '' "
+                               th:field="*{locale}"/>
+                        <p th:if="${#fields.hasErrors('nationality')}" style="color:red;"
+                           th:errors="*{nationality}">Incorrect LP</p>
+                    </div>
+                    <button th:text="${add} ? #{button.label.create} : #{button.label.update} "
+                            th:class="${add} ? 'btn btn-success': 'btn btn-info' "
+                            type="submit" class="btn btn-success" data-toggle="tooltip"
+                            data-placement="top" title="Tooltip on top" >
+                    </button>
+                    <a type="button" th:style="${add} ? 'visibility:hidden' : ''" class="btn btn-danger"
+                       data-toggle="modal" th:attr="data-target='#recordDeleteModal'+${client.id}" data-th-text="#{button.label.delete}"></a>
+                </form>
+                <!-- Modal -->
+                <div class="modal fade" th:attr="id='recordDeleteModal'+${client.id}" tabindex="-1" role="dialog"
+                     aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="recordDeleteModalLabel" data-th-text="#{button.label.delete_message}"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label data-th-text="#{clientDetailPage.label.confirm_to_delete}"></label>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-th-text="#{label.no}"></button>
+                                <form th:action="${add} ? @{/client/2} : @{/client/delete/{id}(id = ${client.id})}"
+                                      th:object="${client}" th:method="${add} ? 'GET' : 'POST'">
+                                    <button type="submit" class="btn btn-primary" data-th-text="#{label.yes}"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.fil/1999/xhtml" xmlns:th="http://www.w3.fil/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title data-th-text="#{clientPreferencesList.label.header.title}"></title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <!--  Table header and 'Create' Button  -->
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h3 class="w-75 p-3" data-th-text="#{clientPreferencesList.label.preferences}"></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="bg-light">
+                        <tr class="border-0">
+                            <th class="border-0">#</th>
+                            <th class="border-0" data-th-text="#{label.org_name}"></th>
+                            <th class="border-0" data-th-text="#{clientPreferencesList.label.value}"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="clientPreferenceModels : ${clientPreferenceModels}">
+                            <td th:text="${clientPreferenceModels.id}">1</td>
+                            <td th:text="${clientPreferenceModels.organizationName}">Organization Name</td>
+                            <td th:text="${clientPreferenceModels.value}">Value</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

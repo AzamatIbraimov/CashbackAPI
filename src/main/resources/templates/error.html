@@ -1,0 +1,37 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.fil/1999/xhtml" xmlns:th="http://www.w3.fil/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title data-th-text="#{error.title}"></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/assets/vendor/datepicker/tempusdominus-bootstrap-4.css"/>
+    <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/libs/css/style.css">
+    <link rel="stylesheet" href="/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="/assets/libs/css/style.css">
+    <link rel="stylesheet" href="/assets/libs/css/notificationPanel.css">
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="bg-light text-center">
+        <div class="container">
+            <div class="row">
+                <div class="offset-xl-2 col-xl-8 offset-lg-2 col-lg-8 col-md-12 col-sm-12 col-12">
+                    <div class="error-section">
+                        <img src="https://colorlib.com/polygon/concept/assets/images/error-img.png" alt="" class="img-fluid">
+                        <div class="error-section-content">
+                            <h2 th:text="#{error.text}" class="display-4"></h2>
+                            <a class="btn btn-secondary btn-lg" th:text="#{error.back}" th:href="@{/}"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</div>
+</body>
+
+</html>

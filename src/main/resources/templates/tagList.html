@@ -1,0 +1,76 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title data-th-text="#{label.tags}"></title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="w-75 p-3" data-th-text="#{label.tags}"></h3>
+                    </div>
+                    <div class="col-md-4 float-right">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a class="btn btn-success m-t-10" th:href="@{form}" data-th-text="#{button.label.create}"></a>
+                            </div>
+                            <div class="col-sm-6">
+                            <a class="btn btn-success m-t-10" th:href="@{add}" data-th-text="#{button.label.add}"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="bg-light">
+                            <tr class="border-0">
+                                <th class="border-0">#</th>
+                                <th class="border-0" data-th-text="#{tagForm.label.name}"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!--looping through organizations category list-->
+                                <tr th:each="tag : ${tags}">
+                                    <td th:text="${tag.id}">1</td>
+                                    <td><a th:href="${tag.id}" > <p th:text="${tag.name}"/> </a> </td>
+                                </tr>
+                            <!--    end of looping     -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+<!--            <nav aria-label="Page navigation example">-->
+<!--                <ul class="pagination justify-content-start">-->
+<!--                    <li th:if="${orgCategories.hasPrevious()}" class="page-item" >-->
+<!--                        <a class="page-link" th:href="@{/org_category/list(page=${orgCategories.number-1})}" tabindex="-1">Previous</a>-->
+<!--                    </li>-->
+<!--                    <th:block th:each="i: ${#numbers.sequence(0, orgCategories.totalPages - 1)}">-->
+<!--                        <li class="page-item active" th:if="${orgCategories.number == i}" >-->
+<!--                            <span class="page-link">[[${i}+1]]</span>-->
+<!--                        </li>-->
+<!--                        <li th:unless="${orgCategories.number == i}">-->
+<!--                            <a class="page-link" th:href="@{/org_category/list(page=${i})}">[[${i}+1]]</a>-->
+<!--                        </li>-->
+<!--                    </th:block>-->
+<!--                    <li class="page-item" th:if="${orgCategories.hasNext()}">-->
+<!--                        <a class="page-link" th:href="@{/org_category/list(page=${orgCategories.number+1})}">Next</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </nav>-->
+
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

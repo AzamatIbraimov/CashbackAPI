@@ -1,0 +1,149 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="${organization} ? ${organization.name} : #{organizationForm.label.create}"> </title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <!-- ============================================================== -->
+    <!-- profile -->
+    <!-- ============================================================== -->
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div sec:authorize="hasRole('ADMIN')" class="section-block" id="basicform">
+            <h3 class="section-title" th:text="${add} ? #{organizationForm.label.create} : #{organizationForm.label.update}"></h3>
+            <p th:text="${add} ? #{organizationForm.label.create_desc} : #{organizationForm.label.update_desc}"></p>
+        </div>
+        <div class="card">
+            <h3 class="card-header font-bold text-dark" th:text="${add} ? #{organizationForm.label.new_org} : ${organization.name}"></h3>
+            <div class="card-body">
+                <form action="#" enctype="multipart/form-data" th:action="${add} ? @{create} : @{/organization/update/{id}(id = ${organization.id})}"  th:object="${organization}" method="POST">
+<!--                    <img th:if="${organization.image}" th:src="${organization.image}" id="org_image" class="img-rounded" alt="Cinque Terre" width="100px">-->
+                    <label class="text-dark font-bold col-form-label" data-th-text="#{organizationForm.label.image.logo}"></label>
+                    <div class="wrapper">
+                        <div class="box">
+                            <div class="js--image-preview"></div>
+                            <div class="upload-options">
+                                <label>
+                                    <input type="file" name="image" class="image-upload" accept="image/*" />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <script th:inline="javascript">
+                        var image = /*[[${organization.image}]]*/ null;
+                        if(image != null){
+                         var thumb = document.querySelector('.js--image-preview');
+                        thumb.style.backgroundImage = 'url(' + image + ')';
+                        thumb.className += ' js--no-default';
+                        }
+                     </script>
+                    <div sec:authorize="hasRole('ADMIN')" class="form-group">
+                        <label class="text-danger font-bold" for="input-select" data-th-text="#{organizationForm.label.org_category}"></label>
+                        <select th:field="*{categoryId}" class="form-control" id="input-select" >
+                            <!--list of organization categories-->
+                            <option th:each="orgCategory : ${orgCategories}" th:value="${orgCategory.id}" th:text="${orgCategory.name}"></option>
+                        </select>
+                    </div>
+
+                    <div sec:authorize="hasRole('MANAGER')" class="form-group">
+                        <label class="text-danger font-bold" for="input-select" data-th-text="#{organizationForm.label.org_category}"></label>
+                        <input  th:value="${organization.orgCategory.name}" id="inputText" type="text" class="form-control" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="text-dark font-bold col-form-label" for="inputText1" data-th-text="#{organizationForm.label.org_name}"></label>
+                        <input sec:authorize="hasRole('ADMIN')" th:value="${add} ? '' : ${organization.name} " th:field="*{name}" id="inputText1" type="text" class="form-control">
+                        <input sec:authorize="hasRole('MANAGER')" th:value="${add} ? '' : ${organization.name} " th:field="*{name}" id="inputText1" type="text" class="form-control" readonly>
+                        <p th:if="${#fields.hasErrors('name')}" style="color: red;" th:errors="*{name}">Incorrect LP</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="text-dark font-bold" for="exampleFormControlTextarea1" data-th-text="#{organizationForm.label.org_desc}"></label>
+                        <textarea sec:authorize="hasRole('ADMIN')"  th:text="${organization} ? ${organization.description} : ''" th:field="*{description} "class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <textarea sec:authorize="hasRole('MANAGER')"  th:text="${organization} ? ${organization.description} : ''" th:field="*{description} "class="form-control" id="exampleFormControlTextarea1" rows="3" readonly></textarea>
+                        <p th:if="${#fields.hasErrors('description')}" style="color: red;" th:errors="*{description}">Incorrect LP</p>
+                    </div>
+
+                    <div th:if="${add}" class="form-group">
+                        <input type="file" name="images" accept="image/*" multiple/>
+                    </div>
+
+                    <div  th:if="${!add}" class="row">
+                        <div class="col-lg-3 col-md-4 col-6" th:each="orgImage : ${lastThreeImages}">
+                            <img alt="org" class="rounded" th:src="${orgImage.image}" style="object-fit: cover; width: 200px; height: 150px; margin-bottom: 50px; padding: 5px;">
+                        </div>
+                    </div>
+                    <div th:if="${!add}">
+                        <a class="btn btn-primary" th:href="'/organization/'+${organization.id}+'/image/list'" role="button" data-th-text="#{organizationForm.label.showMoreImages}"></a>
+                        <br>
+                        <br>
+                    </div>
+                    <div sec:authorize="hasRole('ADMIN')" class="form-group">
+                        <label class="text-dark font-bold" for="input-select" data-th-text="#{label.status}"></label>
+                        <br>
+                        <div class="switch-button switch-button-sm">
+                            <input type="checkbox" th:checked="${organization.status}" name="status" id="input-statu"><span>
+                            <label for="input-statu"></label></span>
+                        </div>
+                    </div>
+
+                    <div  sec:authorize="hasRole('MANAGER')" class="form-group">
+                        <label class="text-dark font-bold" for="input-select" data-th-text="#{label.status}"></label>
+                        <br>
+                        <div class="switch-button switch-button-sm">
+                            <input type="checkbox" disabled="true" th:checked="${organization.status}" name="status" id="input-status"><span>
+                           <label for="input-select"></label></span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button sec:authorize="hasRole('ADMIN')" th:text="${add} ? #{button.label.create}: #{button.label.update} "
+                                th:class="${add} ? 'btn btn-success': 'btn btn-info' "
+                                type="submit" class="btn btn-success" data-toggle="tooltip"
+                                data-placement="top" title="Tooltip on top" id="create_org_button">Create
+                        </button>
+                        <a sec:authorize="hasRole('ADMIN')" th:if="${!add}" type="button" style="color: white;" class="btn btn-danger" data-toggle="modal" th:attr="data-target='#recordDeleteModal'+${organization.id}" data-th-text="#{button.label.delete}"></a>
+
+                    </div>
+
+                </form>
+                <!-- Modal -->
+                <div sec:authorize="hasRole('ADMIN')" class="modal fade" th:attr="id='recordDeleteModal'+${organization.id}" tabindex="-1" role="dialog" aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="recordDeleteModalLabel" data-th-text="#{button.label.delete_message}"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label data-th-text="#{organizationForm.label.confirm_to_delete}"></label>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-th-text="#{label.no}"></button>
+                                <form th:action="@{/organization/delete/{id}(id = ${organization.id})}" th:object="${organization}" method="post">
+                                    <button type="submit" class="btn btn-primary" data-th-text="#{label.yes}"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal end -->
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- end profile var  -->
+    <!--  -->
+    <!-- ============================================================== -->
+</div>
+</body>
+
+</html>

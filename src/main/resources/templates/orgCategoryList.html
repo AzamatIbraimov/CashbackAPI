@@ -1,0 +1,119 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title data-th-text="#{org_category.label.header.title}"></title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h3 class="w-75 p-3" data-th-text="#{org_category.label.org_categories}"></h3>
+                    </div>
+                    <div class="col-md-2 float-right">
+                        <a class="btn btn-success m-t-10" th:href="@{/org_category/form}" data-th-text="#{button.label.create}"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="bg-light">
+                            <tr class="border-0">
+                                <th class="border-0">#</th>
+                                <th class="border-0" data-th-text="#{org_category.label.image}"></th>
+                                <th class="border-0" data-th-text="#{org_category.label.org_category}"></th>
+<!--                                <th class="border-0" data-th-text="#{label.tags}"></th>-->
+                                <th class="border-0" data-th-text="#{button.label.delete}"></th>
+                            </tr>
+                            <style>
+                                .btn1 {
+                                    background-color: white;
+                                    border: none;
+                                    color: grey;
+                                    padding: 12px 16px;
+                                    font-size: 20px;
+                                    cursor: pointer;
+                                }
+
+                                /* Darker background on mouse-over */
+                                .btn1:hover {
+                                    background-color: red;
+                                }
+                            </style>
+                            </thead>
+                            <tbody>
+                            <!--looping through organizations category list-->
+                                <tr th:each="category : ${orgCategories}">
+                                    <td th:text="${category.id}">1</td>
+                                    <td>
+                                        <div class="m-r-10">
+                                            <img th:src="${category.image != null} ? ${category.image} : ${@environment.getProperty('org_category.default.image')}" alt="org image" class="rounded" width="45">
+                                        </div>
+                                    </td>
+                                    <td><a th:href="${category.id}" > <p th:text="${category.name}"/> </a> </td>
+<!--                                    <td><a th:href="'/org_category/' + ${category.id} + '/tag/'" > <i class="fa fa-tags"></i></a> </td>-->
+                                    <td>
+                                        <button type="button" class="btn1 " data-toggle="modal" th:attr="data-target='#recordDeleteModal'+${category.id}"><i class="fa fa-trash"></i></button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" th:attr="id='recordDeleteModal'+${category.id}" tabindex="-1" role="dialog" aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="recordDeleteModalLabel" data-th-text="#{button.label.delete_message}"></h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <label data-th-text="#{org_category.label.confirm_to_delete}"></label>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-th-text="#{label.no}"></button>
+                                                        <form th:action="@{/org_category/delete/{id}(id = ${category.id})}" th:object="${category}" method="POST">
+                                                            <button type="submit" class="btn btn-primary" data-th-text="#{label.yes}"></button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal end -->
+                                    </td>
+                                </tr>
+                            <!--    end of looping     -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-start">
+                    <li th:if="${orgCategories.hasPrevious()}" class="page-item" >
+                        <a class="page-link" th:href="@{/org_category/list(page=${orgCategories.number-1})}" tabindex="-1">Previous</a>
+                    </li>
+                    <th:block th:each="i: ${#numbers.sequence(0, orgCategories.totalPages - 1)}">
+                        <li class="page-item active" th:if="${orgCategories.number == i}" >
+                            <span class="page-link">[[${i}+1]]</span>
+                        </li>
+                        <li th:unless="${orgCategories.number == i}">
+                            <a class="page-link" th:href="@{/org_category/list(page=${i})}">[[${i}+1]]</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:if="${orgCategories.hasNext()}">
+                        <a class="page-link" th:href="@{/org_category/list(page=${orgCategories.number+1})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

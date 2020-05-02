@@ -1,0 +1,140 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.fil/1999/xhtml" xmlns:th="http://www.w3.fil/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title data-th-text="#{bonusList.label.header}"></title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <!--  Table header and 'Create' Button  -->
+            <div sec:authorize="hasRole('MANAGER')" class="card-header">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h3 class="w-75 p-3" data-th-text="#{bonusList.label.header}"></h3>
+                    </div>
+                    <div th:if="${isBonusListByOrg}" class="col-md-2 float-right">
+                        <a class="btn btn-success m-t-10" th:href="@{'/organization/' +${orgId}+ '/bonus/form'}" data-th-text="#{button.label.create}"></a>
+                    </div>
+
+                </div>
+            </div>
+            <div sec:authorize="hasRole('ADMIN')" class="card">
+                <div class="card-body">
+                    <form th:action="${isBonusListByOrg} ? '/organization/' +${orgId}+ '/bonus/list' : '/bonus/list'"
+                          method="post">
+                        <div th:if="${!isBonusListByOrg}" class="form-group">
+                            <label class="text-dark font-bold" for="orgName" data-th-text="#{label.org_name}"></label>
+                            <select id="orgName" name="orgId" class="form-control">
+                                <option value="" data-th-text="#{label.search_by_org}"></option>
+                                <!--list of organization categories-->
+                                <option th:each="orgList : ${orgList}" th:value="${orgList.id}"
+                                        th:text="${orgList.name}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="text-dark font-bold" for="dateFrom" data-th-text="#{label.date_from}"></label>
+                            <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                                <input type="text" name="dateFrom" class="form-control datetimepicker-input"
+                                       id="dateFrom">
+                                <div class="input-group-append" data-target="#datetimepicker4"
+                                     data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="text-dark font-bold" for="dateTo" data-th-text="#{label.date_to}"></label>
+                            <div class="input-group date" id="datetimepicker5" data-target-input="nearest">
+                                <input type="text" name="dateTo" class="form-control datetimepicker-input" id="dateTo">
+                                <div class="input-group-append" data-target="#datetimepicker5"
+                                     data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="text-dark font-bold" for="bonusType"
+                                   data-th-text="#{label.bonus_type}"></label>
+                            <select id="bonusType" name="bonusTypeId" class="form-control">
+                                <!--list of organization categories-->
+                                <option value="" data-th-text="#{label.search_by_bonus_type}"></option>
+                                <option th:each="orgBonusType : ${orgBonusTypeList}" th:value="${orgBonusType.id}"
+                                        th:text="${orgBonusType.name +'('+ orgBonusType.description+')'}  "></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="text-dark font-bold" for="status" data-th-text="#{label.status}"></label>
+                            <select id="status" class="form-control" for="input-select" name="status">
+                                <option value="" data-th-text="#{label.search_by_status}"></option>
+                                <option th:value="true" data-th-text="#{label.active}"></option>
+                                <option th:value="false" data-th-text="#{label.not_active}"></option>
+                            </select>
+                        </div>
+                        <div>
+                            <button class="btn btn-info" type="submit" data-toggle="tooltip"
+                                    data-placement="top" title="Tooltip on top" data-th-text="#{button.label.search}">
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="bg-light">
+                        <tr class="border-0">
+                            <th class="border-0">#</th>
+                            <th class="border-0" data-th-text="#{label.bonus_type}"></th>
+                            <th class="border-0" data-th-text="#{label.status}"></th>
+                            <th class="border-0" data-th-text="#{label.profile}"></th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="orgBonus : ${orgBonusList}">
+                            <td class="orgNumber" th:text="${orgBonus.id}">1</td>
+                            <td th:title="${orgBonus.orgBonusType.description}" th:text="${orgBonus.orgBonusType.name}">
+                            <td>
+                            <div class="switch-button switch-button-xs">
+
+                            <input type="checkbox" class="switch-button switch-button-xs"
+                                       th:checked=${orgBonus.status} name="status"
+                                       th:id="${orgBonus.id}" ><span>
+                            <label th:for="${orgBonus.id}"></label></span>
+                            </div>
+                            </td>
+                            <td><a th:href="${orgBonus.id}"><i class="fas fa-address-book"></i></a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#orgName').select2();
+            $('#bonusType').select2();
+            $('#status').select2();
+        });
+    </script>
+    <script>
+        $(".switch-button").change(function () {
+            var idcheck = $(this).attr('id');
+            $.ajax({
+                type: "GET",
+                url: `../api/orgBonus/changeStatus/${idcheck}`,
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

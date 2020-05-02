@@ -1,0 +1,199 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}" lang="en">
+<head>
+    <title th:text="${category} ? ${category.name} : #{org_categoryForm.label.header.title}"> </title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="section-block" id="basicform">
+            <h3 class="section-title" th:text="${add} ? #{org_categoryForm.label.create} : #{org_categoryForm.label.update}"> </h3>
+            <p th:text="${add} ? #{org_categoryForm.label.create_desc} : #{org_categoryForm.label.update_desc}"></p>
+            <p style="color:red;" th:text="${has_exception} ? ${exception_text} : ''"></p>
+        </div>
+        <div class="card">
+            <h3 class="card-header font-bold text-dark" th:text="${add} ? #{org_categoryForm.label.new_category} : ${category.name}"></h3>
+            <div class="card-body">
+                <form action="#" enctype="multipart/form-data" th:action="${add} ? @{create} : @{/org_category/update/{id}(id = ${category.id})}"  th:object="${category}" method="POST">
+                    <label class="text-dark font-bold col-form-label" data-th-text="#{org_category.label.image.logo}"></label>
+                    <div class="form-group">
+                        <div class="box">
+                            <div class="js--image-preview"></div>
+                            <div class="upload-options">
+                                <label>
+                                    <input type="file" name="image" class="image-upload" accept="image/*" />
+                                </label>
+                            </div>
+                        </div>
+                        <script th:inline="javascript">
+                            var image = /*[[${category.image}]]*/ null;
+                            if(image != null){
+                                var thumb = document.querySelector('.js--image-preview');
+                                thumb.style.backgroundImage = 'url(' + image + ')';
+                                thumb.className += ' js--no-default';
+                            }
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="text-dark font-bold" data-th-text="#{org_categoryForm.label.name}"></label>
+                        <input id="name" type="text" class="form-control" th:value="${category} ? ${category.name} : ' '" th:field="*{name}" minlength="5" maxlength="255" required>
+
+                        <p th:if="${#fields.hasErrors('name')}" style="color:red;" th:errors="*{name}">Incorrect LP</p>
+
+                        <label for="description" class="text-dark font-bold" data-th-text="#{org_categoryForm.label.desc}"></label>
+                        <textarea id="description" class="form-control" th:text=" ${category} ? ${category.description} : '' " th:field="*{description}" minlength="50" maxlength="255" required></textarea>
+                        <p th:if="${#fields.hasErrors('description')}" style="color: red;"
+                           th:errors="*{description}">Incorrect LP</p>
+                        <!--                            <div class="col-md-1 float-right">-->
+                        <!--                                <a th:href = "'/org_category/'+${category.id}+ '/tag/form'" class="btn btn-success m-b-10 m-l-10 m-t-10"> <i class="fa fa-plus"></i></a>-->
+                        <!--                            </div>-->
+                        <!--                            <label for="tags" class="text-dark font-bold" data-th-text="#{org_categoryForm.label.tags}"></label>-->
+                        <!--                            <div id="tags" class="font-bold">-->
+                        <!--                                <th:block th:with="colCount=${5}"  >-->
+                        <!--                                    <div th:each="row : ${#numbers.sequence(0, tags.size(), colCount)}"  class="row">-->
+                        <!--                                        <div th:each="col : ${#numbers.sequence(0, colCount - 1)}" th:if="${row + col &lt; tags.size()}"  class="span3">-->
+                        <!--                                            <a th:href="'/org_category/'+${category.id}+'/tag/'+${tags.get(row + col).id}"  data-th-text="${tags.get(row + col).name} + ', '" ></a>-->
+                        <!--                                        </div>-->
+                        <!--                                    </div>-->
+                        <!--                                </th:block>-->
+                        <!--                            </div>-->
+
+                        <br>
+                    </div>
+                    <button th:text="${add} ? #{button.label.create}: #{button.label.update} "
+                            th:class="${add} ? 'btn btn-success': 'btn btn-info' "
+                            type="submit" class="btn btn-success" data-toggle="tooltip"
+                            data-placement="top" title="Tooltip on top">Create
+                    </button>
+                    <a type="button" th:style="${add} ? 'visibility:hidden' : ''"  class="btn btn-danger" data-toggle="modal"
+                       th:attr="data-target='#recordDeleteModal'+${category.id}" data-th-text="#{button.label.delete}"></a>
+                </form>
+
+                <!-- Modal -->
+                <div class="modal fade" th:attr="id='recordDeleteModal'+${category.id}" tabindex="-1" role="dialog" aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="recordDeleteModalLabel" data-th-text="#{button.label.delete_message}"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label data-th-text="#{org_category.label.confirm_to_delete}"></label>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-th-text="#{label.no}"></button>
+                                <form th:action="${add} ? @{/org_category/list} : @{/org_category/delete/{id}(id = ${category.id})}" th:object="${category}" th:method="${add} ? 'GET' : 'POST'">
+                                    <button type="submit" class="btn btn-primary" data-th-text="#{label.yes}"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal end -->
+            </div>
+
+            <div th:if="${!add}" class="card-body">
+                <form action="#"  method="POST">
+                    <div class="form-group">
+                        <p id="org-cat-id" th:text="${category.id}" style="display: none"></p>
+                        <label for="form-tags-1" class="text-dark font-bold" data-th-text="#{label.tags}"></label>
+                        <p th:if="${tags}" class="text-gray" data-th-text="#{org_category.label.tag.delete}"></p>
+                        <ul id="tag-li-elements" class="mb-1">
+                            <li th:each="tag: ${tags}">
+                                <button
+                                        class="btn-sm btn-brand"
+                                        href="#"
+                                        data-toggle="modal"
+                                        th:attr="data-target='#tagRecordDeleteModal'+${tag.id}"
+                                        type="button" th:text="${tag.name}"></button>
+                                <!-- Modal -->
+                                <div class="modal fade" th:attr="id='tagRecordDeleteModal'+${tag.id}" tabindex="-1" role="dialog" aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" data-th-text="#{button.label.delete_message}"></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label data-th-text="#{org_category.label.tag.confirm_to_delete}"></label>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-th-text="#{label.no}"></button>
+                                                <form th:action="@{/org_category/{catId}/tag/delete/{id}(id = ${tag.id}, catId = ${category.id})}" th:object="${tag}" method="POST">
+                                                    <button type="submit" class="btn btn-primary" data-th-text="#{label.yes}"></button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal end -->
+                            </li>
+                        </ul>
+                        <input id="form-tags-1" name="tags-1" type="text">
+                        <div id="tag-status-message" style="display: none">
+                            <p data-th-text="#{org_category.label.tag.add_success_message}"
+                               class="text-success"></p>
+                        </div>
+                    </div>
+                    <a
+                            id="add-tag-button"
+                            type="button"
+                            class="btn btn-success"
+                            data-placement="top" title="Tooltip on top">
+                        <p data-th-text="#{org_category.label.tag.add_button}"></p>
+                    </a>
+                </form>
+                <script type="application/javascript">
+                    $(document).ready(function() {
+                        $('#add-tag-button').on("click", function () {
+                            var tagList = $("#form-tags-1").val();
+                            var tagStatusMessage = $("#tag-status-message");
+                            var tagSpanText = $("#tag-span").text();
+                            console.log(tagSpanText);
+                            console.log(tagList);
+                            var orgId = $("#org-cat-id").text();
+                            var data = {};
+                            var tags = [];
+                            tagList.split(",").forEach(createTagList);
+                            function createTagList(item) {
+                                tags.push(item);
+                            }
+                            data.tags = tags;
+                            data.orgId = 1;
+                            tagStatusMessage.css("display", "block");
+                            /** add new tags*/
+
+                            /** delete tags from input */
+                            $('span.tag').remove();
+                            $.ajax({
+                                url: "/api/orgCategoryTag/add/new/" + orgId                   ,
+                                type: "POST",
+                                data: JSON.stringify(data),
+                                dataType: 'json',
+                                contentType: "application/json",
+                                success: function () {
+                                    console.log("success");
+                                },
+                                error: function (request, error) {
+                                    console.log(request);
+                                    console.log(error);
+                                }
+                            })
+                        });
+                    });
+
+                </script>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

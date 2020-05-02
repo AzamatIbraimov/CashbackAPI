@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Login</title>
+    <!-- Bootstrap CSS -->
+    <link rel="shortcut icon" href="https://media-exp1.licdn.com/dms/image/C510BAQHK3RC_mgjfFA/company-logo_200_200/0?e=2159024400&v=beta&t=kItLJE73UrC-m38aYhVlN15LIsROS6sNvj3UpMB-Oiw" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/libs/css/style.css">
+    <link rel="stylesheet" href="/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- ============================================================== -->
+<!-- login page  -->
+<!-- ============================================================== -->
+<div class="splash-container">
+    <div class="card ">
+        <div class="card-header text-center"><a th:action="@{/}"><h3>O! Cashback</h3></a><span class="splash-description">Please enter your user information.</span></div>
+        <div class="card-body">
+            <form th:action="@{/login}" method="POST">
+                <div th:if="${param.error}" class="font-bold text-danger">
+                    Неправильный логин или пароль
+                </div>
+                <div th:if="${param.logout}">
+                    Вы вышли из системы
+                </div>
+                <div class="form-group">
+                    <input name="username" class="form-control form-control-lg" id="username" type="text" placeholder="Username" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <input name="password" class="form-control form-control-lg" id="password" type="password" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- end login page  -->
+<!-- ============================================================== -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+
+<!--<head></head>-->
+<!--<body>-->
+
+<!--<h3>Вход</h3>-->
+<!--<form th:action="@{/login}" method="POST">-->
+<!--    <div th:if="${param.error}">-->
+<!--        Неправильный логин или пароль-->
+<!--    </div>-->
+<!--    <div th:if="${param.logout}">-->
+<!--        Вы вышли из системы-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <label>Логин</label>-->
+<!--        <input name="username" type="text" placeholder="Логин">-->
+<!--    </div>-->
+<!--    <br/>-->
+<!--    <div>-->
+<!--        <label>Пароль</label>-->
+<!--        <input name="password" type="password" placeholder="Пароль">-->
+<!--    </div>-->
+<!--    <br/>-->
+<!--    <div>-->
+<!--        <button type="submit">Войти</button>-->
+<!--    </div>-->
+<!--    <br/>-->
+<!--    <a th:href="@{/register}">Регистрация</a>-->
+<!--</form>-->
+<!--</body>-->
+
+<!--</html>-->

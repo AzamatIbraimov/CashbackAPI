@@ -1,0 +1,84 @@
+<!doctype html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}" lang="en">
+<head>
+    <title th:text="${manager} ? ${manager.username} : #{managerForm.label.header.title}"></title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="section-block" id="basicform">
+            <h2 class="section-title"
+                th:text="${add} ? #{managerForm.label.create} : #{managerForm.label.update} + ' ' + ${manager.username}"></h2>
+            <p style="color:red;" th:text="${has_exception} ? ${exception_text} : ''"></p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <form action="#"
+                      th:action="${add} ? @{create} : '/organization/' + ${orgId} + '/manager/update/' + ${manager.id}"
+                      th:object="${manager}" method="POST">
+                    <div class="form-group">
+                        <label class="text-dark font-bold col-form-label" for="username" data-th-text="#{managerForm.label.username}"></label>
+                        <input th:value="${add} ? ${manager.username} : '' " th:field="*{username}" id="username"
+                               type="text" class="form-control">
+                        <p th:if="${#fields.hasErrors('username')}" style="color: red;" th:errors="*{username}">
+                            Incorrect LP</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="text-dark font-bold col-form-label" for="password" data-th-text="#{managerForm.label.password}"></label>
+                        <input th:value="${add} ? ${manager.password} : '' " th:field="*{password}" id="password"
+                               type="password" class="form-control">
+                        <p th:if="${#fields.hasErrors('password')}" style="color: red;" th:errors="*{password}">
+                            Incorrect LP</p>
+                    </div>
+                    <div th:if="${add} == true" class="form-group">
+                        <label class="text-dark font-bold" for="role" data-th-text="#{managerForm.label.role}"></label>
+                        <select id="role" class="form-control" for="input-select" name="role">
+                            <option th:value="true" data-th-text="#{leftMenu.label.manager}"></option>
+                            <option th:value="false" data-th-text="#{leftMenu.label.cashier}"></option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <button th:text=" ${add} ? #{button.label.create} : #{button.label.update}"
+                                th:class="${'Create'} ? 'btn btn-info' : 'btn btn-success' "
+                                type="submit" class="btn btn-success" data-toggle="tooltip"
+                                data-placement="top" title="Tooltip on top">Create
+                        </button>
+                        <a th:if="${!add}" type="button" style="color: white;" class="btn btn-danger"
+                           data-toggle="modal" data-target="#delete_modal " data-th-text="#{button.label.delete}"></a>
+                        <div th:if="${!add}" class="modal fade" tabindex="-1" id="delete_modal" role="dialog"
+                             aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="recordDeleteModalLabel" data-th-text="#{button.label.delete_message}"></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label data-th-text="#{managerForm.label.confirm_to_delete}"></label>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-th-text="#{label.no}"></button>
+                                        <a class="btn btn-danger"
+                                           th:href="@{'/organization/' + ${orgId}  + '/manager/delete/' + ${manager.id}}" data-th-text="#{label.yes}"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
