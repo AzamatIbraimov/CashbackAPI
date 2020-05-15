@@ -1,6 +1,6 @@
 # Alatoo International University
 
-<img src="https://fastercapital.com/images/company/slider/ala-too-international-university.jpg" width="600">
+<img src=https://static-2.akipress.org/st_all/bilim/9/1519540999.2.jpg" width="600" height="600">
 
 # CS 204: Back-end Development with Spring Framework project report
 
