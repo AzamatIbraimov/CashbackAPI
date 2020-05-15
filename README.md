@@ -1,6 +1,6 @@
 # Alatoo International University
-![alt tag](https://static-2.akipress.org/st_all/bilim/9/1519540999.2.jpg)
 
+<img src="https://static-2.akipress.org/st_all/bilim/9/1519540999.2.jpg" width="600">
 
 # CS 204: Back-end Development with Spring Framework project report
 
