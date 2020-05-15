@@ -9,6 +9,7 @@ This is "Intern Labs O!" internship capstone project.
 
 I would like to submit it like my CS 204 capstone project.
 
+This is only API and admin panel part. Other interns created a client application(we use JWT tokens to interact with each other). 
 
 # Description
 
