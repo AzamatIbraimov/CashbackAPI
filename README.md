@@ -28,7 +28,7 @@ System for customers - this system is intended for customers, within the framewo
 # Links
 [Deployed application](https://cashbackapii.herokuapp.com)
 
-[Documentation](https://www.thingiverse.com) 
+[Documentation](https://github.com/AzamatIbraimov/CashbackAPI/wiki) 
 
 [Technical task](https://drive.google.com/file/d/1ufde4h5klrz6CNtK0tKPg3MyQqFTxeOe) 
 
