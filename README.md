@@ -30,7 +30,7 @@ System for customers - this system is intended for customers, within the framewo
 
 [Documentation](https://github.com/AzamatIbraimov/CashbackAPI/wiki) 
 
-[Technical task](https://drive.google.com/file/d/1ufde4h5klrz6CNtK0tKPg3MyQqFTxeOe) 
+[Technical task](https://docs.google.com/document/d/1QNLsMNcMALtPh0vB9VNrMtCQqt3xCkQOzThfKf7fMak/edit) 
 
 [Uml diagram](https://app.lucidchart.com/documents/edit/c125cd0c-efb4-4473-aa33-cb8732640efe/0_0?shared=true) 
 
