@@ -2,12 +2,7 @@
 
 <img src="https://static-2.akipress.org/st_all/bilim/9/1519540999.2.jpg" width="300" height="300">
 
-# CS 204: Back-end Development with Spring Framework project report
-
-
-This is "Intern Labs O!" internship capstone project.
-
-I would like to submit it like my CS 204 capstone project.
+"Intern Labs O!" internship capstone project.
 
 This is only API and admin panel part. Other interns created a client application(we use JWT tokens to interact with each other). 
 
